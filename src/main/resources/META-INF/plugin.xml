@@ -1,0 +1,72 @@
+<idea-plugin  allow-bundled-update="true">
+    <id>cn.olange.rest.link</id>
+    <name>Rest-Link</name>
+    <version>1.0.1</version>
+    <vendor email="olange@52zhoujia.cn" url="https://github.com/Linindoo">Linindoo</vendor>
+
+    <description><![CDATA[
+  <h3>A toolkit for RESTful services development.</h3>
+  <ul>
+   <li>1. provider a button  navigate to same path REST service.  </li>
+   <li>2. search RESTful services by path ( use: Ctrl + \ or Ctrl + Alt + N ) </li>
+   </ul>
+
+   <p>支持 Spring 体系 (Spring MVC / Spring Boot)
+   <p>支持 JAX-RS
+   <p>支持 Java
+   <p>支持 OpenFeign
+
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <li>1.0.1 添加相同url之间的关联，支持快捷跳转</li>
+    ]]>
+    </change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="223"/>
+
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    -->
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <projectService serviceImplementation="cn.olange.restful.navigation.action.GotoRequestMappingConfiguration"/>
+        <codeInsight.lineMarkerProvider language="JAVA"
+                                        implementationClass="cn.olange.restful.provider.RestLinkMarkerProvider"/>
+    </extensions>
+
+
+    <actions>
+        <!--在controller method 中添加 RestfulToolkit 弹出操作，generate rest url、generate rest url with Possibly params （添加可能的参数，解析实体，@RequestBody）、gen json、
+        gen key value for postman(postman 参数bulk edit)、 gen key value for apiview submit -->
+        <!--rest 方法中添加-->
+        <group id="RestfulToolkitGroup" text="RestfulToolkit"
+               description="RESTful Toolkit actions for rest method group">
+            <action class="cn.olange.restful.method.action.GenerateUrlAction" id="GenerateRestUrl"
+                    text="Copy Relation URL">
+                <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            </action>
+        </group>
+
+        <!-- url 导航 -->
+        <action id="Toolkit.GotoService" class="cn.olange.restful.navigation.action.GotoRequestMappingAction"
+                text="Service" description="Go to Service"
+                icon="AllIcons.Actions.Search">
+            <add-to-group group-id="GoToTargetEx" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl BACK_SLASH"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>
+        </action>
+
+        <group id="Toolkit.NavigatorActionsToolbar">
+            <separator/>
+            <reference id="Toolkit.GotoService"/>
+            <separator/>
+        </group>
+    </actions>
+</idea-plugin>
