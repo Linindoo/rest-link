@@ -11,6 +11,7 @@ import cn.olange.restful.annotations.OpenFeignControllerAnnotation;
 import cn.olange.restful.annotations.SpringRequestMethodAnnotation;
 import cn.olange.restful.common.PsiAnnotationHelper;
 import cn.olange.restful.method.RequestPath;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -107,7 +108,9 @@ public class RequestMappingAnnotationHelper {
             }
         } else {
             for (String path : pathList) {
-                mappingList.add(new RequestPath(path, null));
+                if (StringUtils.isNotEmpty(path)) {
+                    mappingList.add(new RequestPath(path, null));
+                }
             }
         }
 

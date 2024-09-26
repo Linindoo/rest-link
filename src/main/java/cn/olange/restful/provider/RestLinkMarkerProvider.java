@@ -64,8 +64,7 @@ public class RestLinkMarkerProvider extends RelatedItemLineMarkerProvider {
         if (element instanceof PsiClass) {
             return null;
         }
-        if (element instanceof PsiMethod) {
-            PsiMethod psiMethod = (PsiMethod) element;
+        if (element instanceof PsiMethod psiMethod) {
             return ServiceHelper.getServiceItemByMethod(psiMethod);
         }
         return null;

@@ -14,11 +14,13 @@ import cn.olange.restful.common.resolver.SpringResolver;
 import cn.olange.restful.method.RequestPath;
 import cn.olange.restful.navigation.action.RestServiceItem;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 服务相关工具类
@@ -73,24 +75,32 @@ public class ServiceHelper {
             List<RequestPath> basePaths = resolver.getBasePaths(psiClass);
             if (CollectionUtils.isNotEmpty(basePaths)) {
                 for (RequestPath basePath : basePaths) {
-                    if (classRequestPaths.stream().noneMatch(x -> x.getPath().equalsIgnoreCase(basePath.getPath()))) {
+                    if (StringUtils.isNotEmpty(basePath.getPath()) && classRequestPaths.stream().noneMatch(x -> x.getPath().equalsIgnoreCase(basePath.getPath()))) {
                         classRequestPaths.add(basePath);
                     }
                 }
             }
         }
-        for (RequestPath methodRequestPath : methodRequestPaths) {
-            if (CollectionUtils.isNotEmpty(classRequestPaths)) {
-                for (RequestPath classRequestPath : classRequestPaths) {
-                    String path =  classRequestPath.getPath();
-                    RestServiceItem item = createRestServiceItem(psiMethod, path, methodRequestPath);
+        if (CollectionUtils.isNotEmpty(methodRequestPaths)) {
+            for (RequestPath methodRequestPath : methodRequestPaths) {
+                if (CollectionUtils.isNotEmpty(classRequestPaths)) {
+                    for (RequestPath classRequestPath : classRequestPaths) {
+                        String path =  classRequestPath.getPath();
+                        RestServiceItem item = createRestServiceItem(psiMethod, path, methodRequestPath);
+                        itemList.add(item);
+                    }
+                } else {
+                    RestServiceItem item = createRestServiceItem(psiMethod, "", methodRequestPath);
                     itemList.add(item);
                 }
-            } else {
-                RestServiceItem item = createRestServiceItem(psiMethod, "", methodRequestPath);
+            }
+        } else if (CollectionUtils.isNotEmpty(classRequestPaths)) {
+            for (RequestPath classRequestPath : classRequestPaths) {
+                RestServiceItem item = createRestServiceItem(psiMethod, classRequestPath.getPath(), null);
                 itemList.add(item);
             }
         }
+
         return itemList;
     }
 
@@ -102,15 +112,15 @@ public class ServiceHelper {
             classUriPath = classUriPath.concat("/");
         }
 
-        String methodPath = requestMapping.getPath();
+        String methodPath = Optional.ofNullable(requestMapping).map(RequestPath::getPath).orElse("");
 
         if (methodPath.startsWith("/")) {
-            methodPath = methodPath.substring(1, methodPath.length());
+            methodPath = methodPath.substring(1);
         }
         String requestPath = classUriPath + methodPath;
         if (requestPath.endsWith("/")) {
             requestPath = requestPath.substring(0, requestPath.length() - 1);
         }
-        return new RestServiceItem(psiMethod, requestMapping.getMethod(), requestPath);
+        return new RestServiceItem(psiMethod, Optional.ofNullable(requestMapping).map(RequestPath::getMethod).orElse(""), requestPath);
     }
 }

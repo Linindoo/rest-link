@@ -6,6 +6,7 @@ import cn.olange.restful.annotations.OpenFeignControllerAnnotation;
 import cn.olange.restful.common.PsiAnnotationHelper;
 import cn.olange.restful.method.RequestPath;
 import com.intellij.psi.PsiModifierList;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,9 @@ FeignAnnotationHelper {
             pathList.add(defaultValue);
         }
         for (String path : pathList) {
-            mappingList.add(new RequestPath(path, null));
+            if (StringUtils.isNotEmpty(path)) {
+                mappingList.add(new RequestPath(path, null));
+            }
         }
 
         return mappingList;
