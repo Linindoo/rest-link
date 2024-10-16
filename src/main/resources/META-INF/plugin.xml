@@ -39,6 +39,10 @@
         <projectService serviceImplementation="cn.olange.restful.navigation.action.GotoRequestMappingConfiguration"/>
         <codeInsight.lineMarkerProvider language="JAVA"
                                         implementationClass="cn.olange.restful.provider.RestLinkMarkerProvider"/>
+        <localInspection groupPath="Java" language="JAVA" shortName="LombokPropertyValueSetToItself" bundle="messages.RestLink"
+                         key="property.value.set.to.itself.display.name" groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.javabeans.issues" enabledByDefault="true" level="WARNING"
+                         implementationClass="cn.olange.restful.inspection.LombokPropertyValueSetToItselfInspection"/>
     </extensions>
 
 
