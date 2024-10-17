@@ -21,8 +21,7 @@ java {
 
 dependencies {
     intellijPlatform {
-        local("D:\\SOFT\\IntelliJ IDEA Community Edition 2024.2.0.1")
-//        intellijIdeaCommunity("2024.1")
+        intellijIdeaCommunity("2024.1")
         zipSigner()
         instrumentationTools()
         bundledPlugin("com.intellij.java")
@@ -31,7 +30,7 @@ dependencies {
 }
 
 group = "cn.olange"
-version = "1.0.1"
+version = "1.0.3"
 
 
 tasks.withType<JavaCompile> {

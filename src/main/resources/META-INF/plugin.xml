@@ -1,7 +1,7 @@
 <idea-plugin  allow-bundled-update="true">
     <id>cn.olange.rest.link</id>
     <name>Rest-Link</name>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
     <vendor email="olange@52zhoujia.cn" url="https://github.com/Linindoo">Linindoo</vendor>
 
     <description><![CDATA[
@@ -9,6 +9,7 @@
   <ul>
    <li>1. provider a button  navigate to same path REST service.  </li>
    <li>2. search RESTful services by path ( use: Ctrl + \ or Ctrl + Alt + N ) </li>
+   <li>3. inspection for Java Bean Property value set to itself with Lombok</li>
    </ul>
 
    <p>支持 Spring 体系 (Spring MVC / Spring Boot)
@@ -19,7 +20,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
+        <li>1.0.3 添加Java bean 更新自身属性的检测(兼容lombok) </li>
+        <li>1.0.2 解决创建重复api的bug</li>
         <li>1.0.1 添加相同url之间的关联，支持快捷跳转</li>
+
     ]]>
     </change-notes>
 
