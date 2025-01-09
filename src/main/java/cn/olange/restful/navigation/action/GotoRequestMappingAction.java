@@ -6,6 +6,7 @@ import com.intellij.ide.util.gotoByName.ChooseByNameFilter;
 import com.intellij.ide.util.gotoByName.ChooseByNameItemProvider;
 import com.intellij.ide.util.gotoByName.ChooseByNameModel;
 import com.intellij.ide.util.gotoByName.ChooseByNamePopup;
+import com.intellij.ide.util.gotoByName.DefaultChooseByNameItemProvider;
 import com.intellij.navigation.ChooseByNameContributor;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
@@ -52,7 +53,7 @@ public class GotoRequestMappingAction extends GotoActionBase implements DumbAwar
             }
         };
 
-        GotoRequestMappingProvider provider = new GotoRequestMappingProvider(getPsiContext(e));
+        DefaultChooseByNameItemProvider provider = new DefaultChooseByNameItemProvider(getPsiContext(e));
         showNavigationPopup(e, model, callback, "Request Mapping Url matching pattern", true, true, (ChooseByNameItemProvider)provider);
     }
 
@@ -125,7 +126,7 @@ public class GotoRequestMappingAction extends GotoActionBase implements DumbAwar
 
 
     @Override
-    public ActionUpdateThread getActionUpdateThread() {
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
         return ActionUpdateThread.BGT;
     }
 }

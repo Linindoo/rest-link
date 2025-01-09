@@ -6,9 +6,13 @@ import cn.olange.restful.navigation.action.RestServiceItem;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
+import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiJavaModule;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import org.apache.commons.collections.CollectionUtils;
@@ -23,12 +27,17 @@ public class RestLinkMarkerProvider extends RelatedItemLineMarkerProvider {
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
         if (element instanceof PsiNameIdentifierOwner) {
-
             List<RestServiceItem> serviceItems = parseService(element);
             if (CollectionUtils.isEmpty(serviceItems)) {
                 return;
             }
-
+            PsiElement file = element.getNavigationElement();
+            if (file != null && file instanceof PsiJavaFile) {
+                PsiJavaModule module = ((PsiJavaFile)file).getModuleDeclaration();
+                if (module != null) {
+                    module.getName();
+                }
+            }
 
             List<RestServiceItem> restServiceItems = ServiceHelper.buildRestServiceItemListUsingResolver(element.getProject());
             if (CollectionUtils.isEmpty(restServiceItems)) {

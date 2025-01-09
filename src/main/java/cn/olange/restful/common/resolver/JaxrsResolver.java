@@ -1,6 +1,8 @@
 package cn.olange.restful.common.resolver;
 
 
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
@@ -33,6 +35,7 @@ public class JaxrsResolver extends BaseServiceResolver  {
             if (!(psiElement instanceof PsiClass psiClass)) {
                 continue;
             }
+            Module module = ModuleUtil.findModuleForFile(psiClass.getContainingFile());
 
             PsiMethod[] psiMethods = psiClass.getMethods();
 
@@ -41,6 +44,7 @@ public class JaxrsResolver extends BaseServiceResolver  {
                 List<RequestPath> methodUriPaths = getMethodPaths(psiMethod);
                 for (RequestPath methodUriPath : methodUriPaths) {
                     RestServiceItem item = createRestServiceItem(psiMethod, classUriPath, methodUriPath);
+                    item.setModule(module);
                     itemList.add(item);
                 }
             }

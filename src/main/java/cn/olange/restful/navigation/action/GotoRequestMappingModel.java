@@ -1,27 +1,27 @@
 package cn.olange.restful.navigation.action;
 
+import cn.olange.restful.common.ServiceHelper;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.ide.util.gotoByName.CustomMatcherModel;
 import com.intellij.ide.util.gotoByName.FilteringGotoByModel;
 import com.intellij.navigation.ChooseByNameContributor;
 import com.intellij.navigation.NavigationItem;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.psi.codeStyle.MinusculeMatcher;
-import com.intellij.psi.codeStyle.NameUtil;
-import cn.olange.restful.common.spring.AntPathMatcher;
 import cn.olange.restful.method.HttpMethod;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import java.util.Collection;
 
 /**
  * Model for "Go to | File" action
  */
 public class GotoRequestMappingModel extends FilteringGotoByModel<HttpMethod> implements DumbAware, CustomMatcherModel {
+    public static final Logger logger = Logger.getInstance(GotoRequestMappingModel.class);
 
     protected GotoRequestMappingModel(@NotNull Project project, @NotNull ChooseByNameContributor[] contributors) {
         super(project, contributors);
@@ -66,7 +66,8 @@ public class GotoRequestMappingModel extends FilteringGotoByModel<HttpMethod> im
     @Override
     public boolean loadInitialCheckBoxState() {
         PropertiesComponent propertiesComponent = PropertiesComponent.getInstance(myProject);
-        return propertiesComponent.isTrueValue("GoToRestService.OnlyCurrentModule");
+//        return propertiesComponent.isTrueValue("GoToRestService.OnlyCurrentModule");
+        return false;
     }
 
     @Override
@@ -86,14 +87,14 @@ public class GotoRequestMappingModel extends FilteringGotoByModel<HttpMethod> im
     @NotNull
     @Override
     public String[] getSeparators() {
-        return new String[]{"/","?"};
+        return new String[]{};
     }
 
 
     @Nullable
     @Override
     public String getCheckBoxName() {
-        return "Only This Module";
+        return null;
     }
 
 
@@ -104,17 +105,13 @@ public class GotoRequestMappingModel extends FilteringGotoByModel<HttpMethod> im
 
     @Override
     public boolean matches(@NotNull String popupItem, @NotNull String userPattern) {
-        String pattern = userPattern;
         if (("/").equals(userPattern)) {
             return true;
         }
-        MinusculeMatcher matcher = NameUtil.buildMatcher("*" + pattern, NameUtil.MatchingCaseSensitivity.NONE);
-        boolean matches = matcher.matches(popupItem);
-        if (!matches) {
-            AntPathMatcher pathMatcher = new AntPathMatcher();
-            matches = pathMatcher.match(popupItem,userPattern);
+        if (StringUtils.isEmpty(popupItem)) {
+            return false;
         }
-        return matches;
+        return StringUtils.trim(popupItem).contains(userPattern);
     }
 
     @NotNull
@@ -122,13 +119,5 @@ public class GotoRequestMappingModel extends FilteringGotoByModel<HttpMethod> im
     public String removeModelSpecificMarkup(@NotNull String pattern) {
         return super.removeModelSpecificMarkup(pattern);
     }
-
-    @Override
-    public ListCellRenderer<?> getListCellRenderer() {
-
-        return super.getListCellRenderer();
-    }
-
-
 
 }

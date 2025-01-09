@@ -37,6 +37,9 @@ public class ServiceHelper {
 
         for (ServiceResolver resolver : serviceResolvers) {
             List<RestServiceItem> allSupportedServiceItemsInModule = resolver.findAllSupportedServiceItemsInModule(globalSearchScope);
+            for (RestServiceItem restServiceItem : allSupportedServiceItemsInModule) {
+                restServiceItem.setModule(module);
+            }
 
             itemList.addAll(allSupportedServiceItemsInModule);
         }
@@ -121,6 +124,7 @@ public class ServiceHelper {
         if (requestPath.endsWith("/")) {
             requestPath = requestPath.substring(0, requestPath.length() - 1);
         }
+
         return new RestServiceItem(psiMethod, Optional.ofNullable(requestMapping).map(RequestPath::getMethod).orElse(""), requestPath);
     }
 }

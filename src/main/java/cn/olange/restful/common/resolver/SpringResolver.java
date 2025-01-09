@@ -1,5 +1,6 @@
 package cn.olange.restful.common.resolver;
 
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
@@ -31,10 +32,14 @@ public class SpringResolver  extends BaseServiceResolver  {
             for (PsiAnnotation psiAnnotation : psiAnnotations) {
                 PsiModifierList psiModifierList = (PsiModifierList) psiAnnotation.getParent();
                 PsiElement psiElement = psiModifierList.getParent();
-
                 PsiClass psiClass = (PsiClass) psiElement;
                 List<RestServiceItem> serviceItemList = getServiceItemList(psiClass);
-                itemList.addAll(serviceItemList);
+                if (serviceItemList != null) {
+                    for (RestServiceItem restServiceItem : serviceItemList) {
+                        restServiceItem.setModule(ModuleUtil.findModuleForFile(psiClass.getContainingFile()));
+                    }
+                    itemList.addAll(serviceItemList);
+                }
             }
 
         }

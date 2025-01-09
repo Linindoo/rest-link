@@ -39,32 +39,4 @@ public class RestServiceChooseByNamePopup extends ChooseByNamePopup {
         return newPopup;
     }
 
-    @Override
-    public String transformPattern(String pattern) {
-        ChooseByNameModel model = getModel();
-        return getTransformedPattern(pattern, model);
-    }
-
-    public static String getTransformedPattern(String pattern, ChooseByNameModel model) {
-        if (!(model instanceof GotoRequestMappingModel)) {
-            return pattern;
-        }
-
-        pattern = ToolkitUtil.removeRedundancyMarkup(pattern);
-        return pattern;
-    }
-
-
-    @Nullable
-    public String getMemberPattern() {
-        final String enteredText = getTrimmedText();
-        final int index = enteredText.lastIndexOf('#');
-        if (index == -1) {
-            return null;
-        }
-
-        String name = enteredText.substring(index + 1).trim();
-        return StringUtil.isEmptyOrSpaces(name) ? null : name;
-    }
-
 }

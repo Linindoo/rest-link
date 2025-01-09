@@ -16,7 +16,7 @@ import javax.swing.*;
 
 public class RestServiceItem implements NavigationItem {
     private PsiMethod psiMethod;
-    private PsiElement psiElement;
+    private final PsiElement psiElement;
     private Module module;
 
     private HttpMethod method;
@@ -79,40 +79,7 @@ public class RestServiceItem implements NavigationItem {
         @Nullable
         @Override
         public String getLocationString() {
-            return ApplicationManager.getApplication()
-                .runWriteAction(new Computable<>() {
-                    String location = null;
-                    @Override
-                    public String compute() {
-                        return null;
-                    }
-
-                    @Override
-                    public String get() {
-                        if (psiElement instanceof PsiMethod) {
-                            PsiMethod psiMethod = ((PsiMethod) psiElement);
-                            if (module != null) {
-                                location =
-                                    module.getName() +
-                                        "#" +
-                                        psiMethod
-                                            .getContainingClass()
-                                            .getName()
-                                            .concat("#")
-                                            .concat(psiMethod.getName());
-                            } else {
-                                location =
-                                    psiMethod
-                                        .getContainingClass()
-                                        .getName()
-                                        .concat("#")
-                                        .concat(psiMethod.getName());
-                            }
-                        }
-                        return "(" + location + ")";
-                    }
-
-                });
+            return "(" + module.getName() + ")";
         }
 
         @Nullable
