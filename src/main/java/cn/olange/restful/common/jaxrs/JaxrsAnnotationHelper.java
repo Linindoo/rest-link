@@ -14,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class JaxrsAnnotationHelper {
 
@@ -38,7 +37,7 @@ public class JaxrsAnnotationHelper {
         JaxrsHttpMethodAnnotation[] jaxrsHttpMethodAnnotations = JaxrsHttpMethodAnnotation.values();
 
         Arrays.stream(annotations).forEach(a -> Arrays.stream(jaxrsHttpMethodAnnotations).forEach(methodAnnotation -> {
-            if (a.getQualifiedName().equalsIgnoreCase(methodAnnotation.getQualifiedName())) {
+            if (StringUtils.isNotEmpty(a.getQualifiedName()) && a.getQualifiedName().equalsIgnoreCase(methodAnnotation.getQualifiedName())) {
                 list.add(new RequestPath(path, methodAnnotation.getShortName()));
             }
         }));
